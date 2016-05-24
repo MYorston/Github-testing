@@ -1,0 +1,123 @@
+#include <iostream>
+#include <cstdlib>
+int examWeight = 35;
+int finalWeight = 40;
+int labWeight = 25;
+
+using namespace std;
+
+struct student
+{
+    int stdID;
+    double exam1,exam2,finalExam, labHW, grade;
+    char average;
+};
+
+typedef struct node{
+    ;
+    student std;
+    node* next;
+}* nodePtr;
+nodePtr head = NULL;
+nodePtr curr = NULL;
+nodePtr temp = NULL;
+
+void AddNode(student info){
+    nodePtr n = new node;
+    n->next = NULL;
+    n->std = info;
+    if(head != NULL){
+        curr = head;
+        while(curr->next != NULL){
+            curr = curr->next;
+        }
+        curr->next = n;
+    }
+    else
+    {
+        head = n;
+    }
+}
+
+void readGrades(student& s)
+{
+    cout <<"Enter student ID: "<< endl;
+    cin >> s.stdID;
+    cout <<"Enter two Exams, each out of 50"<<endl;
+    cin >> s.exam1;
+    cin >> s.exam2;
+    cout <<"Enter Final Exam out of 100"<<endl;
+    cin >> s.finalExam;
+    cout <<"Enter Lab/HW out of 20"<<endl;
+    cin >> s.labHW;
+}
+
+void computeGrades(student& s)
+{
+    double examMark = ((s.exam1+s.exam2)/100)* examWeight;
+    double finalExam = (s.finalExam/100)*finalWeight;
+    double labMark = (s.labHW/20)*labWeight;
+    double avg = examMark + finalExam + labMark;
+    s.grade = avg;
+    if(avg >=90){
+        s.average = 'A';
+    }
+    else if(avg>=80){
+        s.average = 'B';
+    }
+    else if (avg >=70){
+        s.average = 'C';
+    }
+    else if (avg>=60){
+        s.average = 'D';
+    }
+    else{
+        s.average = 'F';
+    }
+}
+
+void displayGrades(student& s)
+{
+    cout <<"Student's ID: "<<s.stdID<<endl;
+    cout <<"The exam grades are: "<<s.exam1<< " and "<<s.exam2<<endl;
+    cout <<"The final grade is: "<<s.finalExam<<endl;
+    cout <<"Lab/Hw grade is: "<< s.labHW<<endl;
+    cout <<"The average is: "<<s.grade<<endl;
+    cout <<"The Letter grade assigned is: "<<s.average<<endl;
+    cout <<endl;
+}
+
+void PrintList(){
+    curr = head;
+    while(curr != NULL)
+    {
+        computeGrades(curr->std);
+        displayGrades(curr->std);
+        curr = curr->next;
+    }
+}
+
+int main() {
+    student s1,s2,s3,s4;
+    student studentArray[4] = {s1, s2, s3, s4};
+
+    student *ptr = studentArray;
+    size_t size = sizeof(studentArray)/sizeof(studentArray[0]);
+    student *const end = ptr + size;
+    
+    cout << "Calculate the grades of 4 Students\n";
+
+    for(ptr;ptr<end;ptr++)
+    {
+        readGrades(*ptr);
+        AddNode(*ptr);
+    }
+
+    PrintList();
+
+
+    cin.get();
+    cin.get();
+    cin.get();
+    return 0;
+}
